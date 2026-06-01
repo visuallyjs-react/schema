@@ -1,0 +1,468 @@
+
+:root {
+    --vjs-schema-blue:#2A87B2;
+    --vjs-element-bg:#C5D4DB;
+    --vjs-schema-color-integer: #84bbdd;
+    --vjs-schema-color-varchar: #99d1aa;
+    --vjs-schema-color-date: #e1c281;
+    --vjs-schema-error:orangered;
+    --vjs-schema-light-grey:#ddd;
+    --vjs-schema-view-bg:#fff;
+    --vjs-schema-drag-active:#629f72;
+    --vjs-schema-drag-hover:#87ba8f;
+    --vjs-schema-canvas-bg:#fff;
+}
+
+.vjs-schema-builder {
+    display: flex;
+    height: 100vh;
+}
+
+.vjs-schema-builder-canvas {
+    background-color: var(--vjs-schema-canvas-bg);
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    overflow: hidden !important;
+}
+
+.vjs-schema-builder-rhs {
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    flex: 0 0 280px;
+    border-left: 1px solid var(--vjs-schema-light-grey);
+    box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+    z-index: 5;
+    overflow-y: auto;
+}
+
+.vjs-schema-builder-rhs > * {
+    border-bottom: 1px solid #eee;
+    padding: 1.25rem 1rem;
+}
+
+.vjs-schema-builder-rhs > *:last-child {
+    border-bottom: none;
+}
+
+.vjs-schema-builder-rhs-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.vjs-miniview {
+    position: relative !important;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    height: 150px !important;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+
+.vjs-controls {
+    top: 25px;
+    position: absolute;
+    left: 25px;
+    z-index: 1;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* --- Delete buttons -------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------- */
+
+.vjs-schema-delete {
+    cursor:pointer;
+}
+
+.vjs-schema-delete:after {
+    content: "×";
+}
+
+.vjs-schema-delete:hover {
+    color: var(--vjs-schema-error);
+}
+
+
+.vjs-schema-add:hover {
+     color: #ff8000;
+ }
+
+.vjs-schema-add:after {
+     content:"+";
+}
+
+.vjs-schema-edit:hover {
+     color: #ff8000;
+ }
+
+.vjs-schema-edit:after {
+     content:"✎";
+ }
+
+.vjs-schema-element .vjs-schema-add {
+    right:3px;
+}
+
+.vjs-schema-element .vjs-schema-delete {
+    left:3px;
+}
+
+.vjs-schema-element {
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-size: 12px;
+    background-color: white;
+    z-index: 12;
+    overflow: hidden;
+    min-width: 80px;
+    min-height: 30px;
+    width: auto;
+    flex-direction: column;
+}
+
+.vjs-schema-element-name {
+    cursor: move;
+    font-size: 13px;
+    padding: 6px;
+    display: flex;
+    align-items: center;
+}
+
+.vjs-schema-element-name span {
+    cursor:pointer;
+    margin-left: auto;
+    margin-right: auto;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.vjs-schema-buttons {
+    display:flex;
+    align-items: center;
+    cursor:pointer;
+}
+
+/* ------------------------------ z-index -------------------------------------------------------------- */
+
+.vjs-node {
+    z-index:10;
+}
+
+.vjs-most-recently-dragged {
+    z-index:11;
+}
+
+.vjs-connector {
+    z-index:8;
+}
+
+.vjs-connector:hover {
+    z-index:9;
+}
+
+.vjs-connector:hover .vjs-connector-path {
+    stroke:var(--vjs-schema-blue);
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* --- Node common -------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------- */
+
+.vjs-schema-table, .vjs-schema-view {
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #d1d9e0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.vjs-schema-table:hover, .vjs-schema-view:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    border-color: var(--vjs-schema-blue);
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* ---------------- Table nodes ------------------------------------------------------------------------ */
+/* ----------------------------------------------------------------------------------------------------- */
+
+
+.vjs-schema-table {
+    margin-bottom: 0;
+    min-width: 220px;
+    align-items: stretch;
+    max-width: 300px;
+}
+
+.vjs-schema-table .vjs-schema-element-name {
+    background-color: #f6f8fa;
+    border-bottom: 1px solid #d1d9e0;
+    font-weight: 600;
+    color: #24292f;
+    padding: 8px 12px;
+}
+
+.vjs-schema-table-columns {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    position:relative;
+}
+
+.vjs-schema-table-column {
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f0f2f5;
+    transition: background-color 0.15s ease;
+    gap: 8px;
+    position: relative;
+}
+
+.vjs-schema-table-column:last-child {
+    border-bottom: none;
+}
+
+.vjs-schema-table-column:hover {
+    background-color: #f8fafc;
+}
+
+.vjs-schema-table-column > div:nth-child(2) {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vjs-schema-table-column-edit {
+    margin-left: auto;
+    cursor: pointer;
+}
+
+.vjs-schema-edit-name {
+    margin-right:7px;
+}
+
+.vjs-schema-table-column-delete, .vjs-schema-view-delete {
+    padding:2px 5px 2px 0;
+    cursor: pointer;
+    position:static;
+    font-size: 10px;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/*    Mappings for column types. The template writes a `data-type` attribute with the column's datatype  */
+/* ----------------------------------------------------------------------------------------------------- */
+
+[data-type='varchar'] {
+    background-color: var(--vjs-schema-color-varchar);
+}
+
+[data-type='integer'] {
+    background-color: var(--vjs-schema-color-integer);
+}
+
+[data-type='date'] {
+    background-color: var(--vjs-schema-color-date);
+}
+
+[data-primary-key='true']:after {
+    content:'\26b1';
+    position:absolute;
+    right: 32px;
+    font-size: 10px;
+    color: #e3b341;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* ---------------- View nodes ------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------- */
+
+.vjs-schema-view {
+    margin-bottom: 0;
+    width: 280px;
+    overflow: hidden;
+    align-items: stretch;
+    background-color: white;
+}
+
+.vjs-schema-view .vjs-schema-element-name {
+    background-color: #f0f7ff;
+    border-bottom: 1px solid #d0e7ff;
+    font-weight: 600;
+    color: #0969da;
+    padding: 8px 12px;
+}
+
+.vjs-schema-view-details {
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 11px;
+    padding: 12px;
+    min-height: 60px;
+    position: relative;
+    background-color: #fdfdfd;
+    color: #444;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+.vjs-schema-view-delete {
+    padding: 2px;
+    cursor: pointer;
+    float:left;
+    font-size: 10px;
+    line-height: 20px;
+}
+
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* ---------------- Node Palette ----------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------- */
+
+.vjs-schema-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.vjs-schema-palette-item {
+    padding: 0.75rem 0.5rem;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    flex: 1 1 calc(50% - 0.25rem);
+    text-align: center;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.vjs-schema-palette-item:hover {
+    border-color: var(--vjs-schema-blue);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.vjs-palette-selected-element {
+    color:white;
+    background-color: var(--vjs-schema-blue);
+    outline:2px solid var(--vjs-schema-blue);
+}
+
+.vjs-palette-active {
+    outline: 4px dashed var(--vjs-schema-blue);
+    outline-offset: -10px;
+    cursor: copy;
+}
+
+.vjs-palette-hover {
+    background-color: #fcf8f3;
+}
+
+
+/* ---------------------------------------------------------------------------------------------------- */
+/* --- Drag/drop interactions ------------------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------------------------------- */
+
+.vjs-drag-active {
+    background-color: var(--vjs-schema-drag-active) !important;
+    color: #FFF !important;
+}
+
+.vjs-drag-hover {
+    background-color: var(--vjs-schema-drag-hover) !important;
+    color: #FFF !important;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/* ---------------- Edge styles ------------------------------------------------------------------------ */
+/* ----------------------------------------------------------------------------------------------------- */
+
+.vjs-schema-delete-relationship {
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.vjs-schema-delete-relationship:hover {
+    fill: var(--vjs-schema-error);
+}
+
+/* ------------------ INSPECTOR ------------------------------------------------- */
+
+.vjs-inspector {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.vjs-inspector-inactive {
+    color: #888;
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
+.vjs-inspector > div {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vjs-inspector > div:first-child {
+    margin-top: 0;
+}
+
+.vjs-inspector input[type='text'],
+.vjs-inspector textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    margin: 4px 0 12px 0;
+}
+
+.vjs-inspector input[type='text']:focus,
+.vjs-inspector textarea:focus {
+    border-color: var(--vjs-schema-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(42, 135, 178, 0.2);
+}
+
+.vjs-inspector label {
+    display: flex;
+    align-items: center;
+    padding: 6px 8px;
+    margin: 2px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.2s;
+}
+
+.vjs-inspector label:hover {
+    background-color: #f0f0f0;
+}
+
+.vjs-inspector input[type='radio'] {
+    margin-right: 10px;
+}
