@@ -26,7 +26,7 @@ function App({url, hideRhs}) {
               </SurfaceComponent>
           </div>
           {!hideRhs && <div className="vjs-schema-builder-rhs">
-              <div className="vjs-schema-builder-rhs-section">
+              <div className="vjs-schema-builder-rhs-section vjs-schema-builder-rhs-navigation">
                   <span className="vjs-schema-builder-rhs-title">Navigation</span>
                   <MiniviewComponent/>
               </div>
